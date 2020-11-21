@@ -8,3 +8,4 @@ lib/__pycache__/*
 lib/modes/__pycache__/*
 config/__pycache__/*
 __pycache__*
+env
