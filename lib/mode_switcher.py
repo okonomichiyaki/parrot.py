@@ -32,6 +32,7 @@ class ModeSwitcher(object):
                 'testing': TestMode(ModeSwitcher.__instance),
                 'worklog': ExcelMode(ModeSwitcher.__instance, ''),
                 'excel': ExcelMode(ModeSwitcher.__instance, ''),
+                'simpleclick': SimpleClickMode(ModeSwitcher.__instance),
             }
             
         return ModeSwitcher.__instance
