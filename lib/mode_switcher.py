@@ -33,6 +33,7 @@ class ModeSwitcher(object):
                 'worklog': ExcelMode(ModeSwitcher.__instance, ''),
                 'excel': ExcelMode(ModeSwitcher.__instance, ''),
                 'simpleclick': SimpleClickMode(ModeSwitcher.__instance),
+                'simplespeech': SimpleSpeechMode(ModeSwitcher.__instance),
             }
             
         return ModeSwitcher.__instance

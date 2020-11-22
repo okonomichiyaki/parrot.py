@@ -8,5 +8,6 @@ from lib.modes.mode_starcraft import *
 from lib.modes.mode_phonemes import *
 from lib.modes.mode_hollowknight import *
 from lib.modes.mode_simpleclick import *
+from lib.modes.mode_simplespeech import *
 
-__all__ = ["BrowseMode", "ExcelMode", "HeroesMode", "TestMode", "TwitchMode", "YoutubeMode", "StarcraftMode", "PhonemesMode", "HollowknightMode", "SimpleClickMode"]
+__all__ = ["BrowseMode", "ExcelMode", "HeroesMode", "TestMode", "TwitchMode", "YoutubeMode", "StarcraftMode", "PhonemesMode", "HollowknightMode", "SimpleClickMode", "SimpleSpeechMode"]
