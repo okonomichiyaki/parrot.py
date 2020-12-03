@@ -10,6 +10,7 @@ class ScanCodes:
     KEY_S = 0x1F
     KEY_D = 0x20
     KEY_E = 0x12
+    KEY_Q = 0x10
 
 # C struct redefinitions 
 PUL = ctypes.POINTER(ctypes.c_ulong)
