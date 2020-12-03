@@ -6,6 +6,10 @@ class ScanCodes:
     LEFT_SHIFT = 0x2A
     SPACE = 0x39
     KEY_W = 0x11
+    KEY_A = 0x1E
+    KEY_S = 0x1F
+    KEY_D = 0x20
+    KEY_E = 0x12
 
 # C struct redefinitions 
 PUL = ctypes.POINTER(ctypes.c_ulong)
