@@ -11,7 +11,7 @@ class HadesMode(BaseMode):
             'name': 'attack',
             'sounds': ['hiss'],
             'threshold': {
-                'percentage': 70,
+                'percentage': 85,
                 'intensity': 1000
             }
         },
@@ -19,7 +19,7 @@ class HadesMode(BaseMode):
             'name': 'attack2',
             'sounds': ['zzh'],
             'threshold': {
-                'percentage': 70,
+                'percentage': 90,
                 'intensity': 1000
             },
             'throttle': {
@@ -41,7 +41,7 @@ class HadesMode(BaseMode):
             'name': 'interact',
             'sounds': ['whistle'],
             'threshold': {
-                'percentage': 60,
+                'percentage': 90,
                 'intensity': 1000
             },
             'throttle': {
@@ -52,9 +52,9 @@ class HadesMode(BaseMode):
             'name': 'dash',
             'sounds': ['motorlips'],
             'threshold': {
-                'percentage': 70,
+                'percentage': 85,
                 'intensity': 1000,
-            },
+            },  
             'throttle': {
                 'dash': 0.3
             }
@@ -63,7 +63,7 @@ class HadesMode(BaseMode):
             'name': 'move',
             'sounds': ['cluck'],
             'threshold': {
-                'percentage': 70,
+                'percentage': 85,
                 'intensity': 1000,
             },
             'throttle': {
@@ -74,15 +74,22 @@ class HadesMode(BaseMode):
     ]
 
     def short_press_key( self, scan_code ):
-        PressKey(scan_code)
-        time.sleep(0.1)
-        ReleaseKey(scan_code)
+        if ( not self.inputManager.is_testing ):
+            PressKey(scan_code)
+            time.sleep(0.1)
+            ReleaseKey(scan_code)
 
     def hold_key( self, scan_code ):
-        PressKey(scan_code)
+        if ( not self.inputManager.is_testing ):
+            PressKey(scan_code)
+
+    def press_key(self,scan_code):
+        if ( not self.inputManager.is_testing ):
+            PressKey(scan_code)
 
     def release_key( self, scan_code ):
-        ReleaseKey(scan_code)
+        if ( not self.inputManager.is_testing ):
+            ReleaseKey(scan_code)
 
     def get_wasd( self ):
         keys = { ScanCodes.KEY_W: False, ScanCodes.KEY_A: False, ScanCodes.KEY_S: False, ScanCodes.KEY_D: False }
@@ -127,13 +134,13 @@ class HadesMode(BaseMode):
         if ( self.moving ):
             for key, held in keys.items():
                 if ( held ):
-                    PressKey(key)
+                    self.press_key(key)
                 else:
-                    ReleaseKey(key)
+                    self.release_key(key)
         # If not moving release all keys
         else:
             for key in keys:
-                ReleaseKey(key)
+                self.release_key(key)
 
         # If we are attacking, hold LMB
         if ( self.attacking ):
