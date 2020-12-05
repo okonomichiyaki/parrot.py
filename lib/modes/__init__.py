@@ -7,6 +7,5 @@ from lib.modes.mode_youtube import *
 from lib.modes.mode_starcraft import *
 from lib.modes.mode_phonemes import *
 from lib.modes.mode_hollowknight import *
-from lib.modes.mode_hades import *
 
-__all__ = ["BrowseMode", "ExcelMode", "HeroesMode", "TestMode", "TwitchMode", "YoutubeMode", "StarcraftMode", "PhonemesMode", "HollowknightMode", "HadesMode"]
+__all__ = ["BrowseMode", "ExcelMode", "HeroesMode", "TestMode", "TwitchMode", "YoutubeMode", "StarcraftMode", "PhonemesMode", "HollowknightMode"]
