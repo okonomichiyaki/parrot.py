@@ -16,19 +16,30 @@ class HadesMode(BaseMode):
             }
         },
         {
-            'name': 'attack2',
+            'name': 'dash',
+            'sounds': ['motorlips'],
+            'threshold': {
+                'percentage': 85,
+                'intensity': 1000,
+            },  
+            'throttle': {
+                'dash': 0.3
+            }
+        },
+        {
+            'name': 'cast',
             'sounds': ['zzh'],
             'threshold': {
                 'percentage': 90,
                 'intensity': 1000
             },
             'throttle': {
-                'attack2': 0.3
+                'cast': 0.3
             }
         },
         {
             'name': 'special',
-            'sounds': ['ii'],
+            'sounds': ['oo'],
             'threshold': {
                 'percentage': 50,
                 'intensity': 1000
@@ -38,7 +49,7 @@ class HadesMode(BaseMode):
             }
         },
         {
-            'name': 'interact call',
+            'name': 'interact-call-gift',
             'sounds': ['whistle'],
             'threshold': {
                 'percentage': 90,
@@ -46,17 +57,6 @@ class HadesMode(BaseMode):
             },
             'throttle': {
                 'interact': 0.3
-            }
-        },
-        {
-            'name': 'dash',
-            'sounds': ['motorlips'],
-            'threshold': {
-                'percentage': 85,
-                'intensity': 1000,
-            },  
-            'throttle': {
-                'dash': 0.3
             }
         },
         {
@@ -128,8 +128,8 @@ class HadesMode(BaseMode):
         elif ( self.detect_silence() ):
             self.attacking = False
 
-        # Attack2 is RMB single click, for now?
-        elif ( self.detect('attack2') ):
+        # cast is RMB single click, for now?
+        elif ( self.detect('cast') ):
             self.drag_mouse(button='right')
             time.sleep(0.1)
             self.stop_drag_mouse(button='right')
@@ -137,7 +137,7 @@ class HadesMode(BaseMode):
         elif ( self.detect('special') ):
             self.short_press_key(ScanCodes.KEY_Q)
 
-        elif ( self.detect('interact call') ):
+        elif ( self.detect('interact-call-gift') ):
             self.interact_call()
 
         # If we are moving now, hold keys and maybe release some
