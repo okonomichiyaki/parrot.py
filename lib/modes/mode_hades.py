@@ -38,7 +38,7 @@ class HadesMode(BaseMode):
             }
         },
         {
-            'name': 'interact',
+            'name': 'interact call',
             'sounds': ['whistle'],
             'threshold': {
                 'percentage': 90,
@@ -91,6 +91,17 @@ class HadesMode(BaseMode):
         if ( not self.inputManager.is_testing ):
             ReleaseKey(scan_code)
 
+    def interact_call( self ):
+        side = 'left' if self.detector.detect_mouse_quadrant( 2, 1 ) == 1 else 'right'
+        # If we are moving, this is a "call"
+        # otherwise it's interact or gift depending on mouse
+        if ( self.moving ):
+            self.short_press_key(ScanCodes.KEY_F)
+        elif ( side == 'left' ): 
+            self.short_press_key(ScanCodes.KEY_E)
+        elif ( side == 'right' ):
+            self.short_press_key(ScanCodes.KEY_G)
+
     def get_wasd( self ):
         keys = { ScanCodes.KEY_W: False, ScanCodes.KEY_A: False, ScanCodes.KEY_S: False, ScanCodes.KEY_D: False }
         if( self.quadrant3x3 == TOPLEFT or self.quadrant3x3 == TOPMIDDLE or self.quadrant3x3 == TOPRIGHT ):
@@ -126,8 +137,8 @@ class HadesMode(BaseMode):
         elif ( self.detect('special') ):
             self.short_press_key(ScanCodes.KEY_Q)
 
-        elif ( self.detect('interact') ):
-            self.short_press_key(ScanCodes.KEY_E)
+        elif ( self.detect('interact call') ):
+            self.interact_call()
 
         # If we are moving now, hold keys and maybe release some
         keys = self.get_wasd()
