@@ -11,27 +11,28 @@ class HadesMode(BaseMode):
             'name': 'attack',
             'sounds': ['hiss'],
             'threshold': {
-                'percentage': 85,
-                'intensity': 1000
+                'percentage': 95,
+                'power': 10000
             }
         },
         {
             'name': 'dash',
             'sounds': ['motorlips'],
             'threshold': {
-                'percentage': 85,
-                'intensity': 1000,
-            },  
+                'percentage': 95,
+                'power': 15000,
+            },
             'throttle': {
                 'dash': 0.3
             }
         },
         {
             'name': 'cast',
-            'sounds': ['zzh'],
+            'sounds': ['tch'],
             'threshold': {
-                'percentage': 90,
-                'intensity': 1000
+                'percentage': 99,
+                'power': 10000,
+                'above_frequency': 100,
             },
             'throttle': {
                 'cast': 0.3
@@ -39,32 +40,45 @@ class HadesMode(BaseMode):
         },
         {
             'name': 'special',
-            'sounds': ['oo'],
+            'sounds': ['pop'],
             'threshold': {
-                'percentage': 50,
-                'intensity': 1000
+                'percentage': 99,
+                'power': 50000
             },
-            'throttle': {
-                'special': 0.3
-            }
+            # 'throttle': {
+            #     'special': 0.1
+            # }
         },
         {
             'name': 'interact-call-gift',
             'sounds': ['whistle'],
             'threshold': {
-                'percentage': 90,
-                'intensity': 1000
+                'percentage': 99,
+                'power': 10000,
+                'above_frequency': 70,
+                'below_frequency': 100,
             },
             'throttle': {
                 'interact': 0.3
             }
         },
         {
+            'name': 'summon',
+            'sounds': ['low_whistle'],
+            'threshold': {
+                'percentage': 90,
+                'power': 10000
+            },
+            'throttle': {
+                'summon': 0.3
+            }
+        },
+        {
             'name': 'move',
             'sounds': ['cluck'],
             'threshold': {
-                'percentage': 85,
-                'intensity': 1000,
+                'percentage': 95,
+                'power': 10000,
             },
             'throttle': {
                 'move': 0.3
@@ -115,18 +129,14 @@ class HadesMode(BaseMode):
         return keys
 
     def handle_sounds( self, dataDicts ):
-        # If we get input for `move`, toggle moving
-        if ( self.detect('move') ):
-            self.moving = not self.moving
-
-        elif ( self.detect('dash') ):
-            self.short_press_key(ScanCodes.SPACE)
-
         # If we get input for `attack`, enable attack, otherwise if silence disable
-        elif ( self.detect('attack') ):
+        if ( self.detect('attack') ):
             self.attacking = True
         elif ( self.detect_silence() ):
             self.attacking = False
+
+        elif ( self.detect('dash') ):
+            self.short_press_key(ScanCodes.SPACE)
 
         # cast is RMB single click, for now?
         elif ( self.detect('cast') ):
@@ -139,6 +149,13 @@ class HadesMode(BaseMode):
 
         elif ( self.detect('interact-call-gift') ):
             self.interact_call()
+
+        elif ( self.detect('summon') ):
+            self.short_press_key(ScanCodes.KEY_1)
+
+        # If we get input for `move`, toggle moving
+        elif ( self.detect('move') ):
+            self.moving = not self.moving
 
         # If we are moving now, hold keys and maybe release some
         keys = self.get_wasd()
