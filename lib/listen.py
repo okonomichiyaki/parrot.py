@@ -170,7 +170,7 @@ def classification_consumer( audio, stream, classifier, persist_files, high_spee
             
             #long_comment = "Time: %0.2f - Prediction in: %0.2f - Winner: %s - Percentage: %0d - Frequency %0d                                        " % (seconds_playing, prediction_time, winner, probabilityDict[winner]['percent'], probabilityDict[winner]['frequency'])
             short_comment = "T %0.3f - [%0d%s %s] F:%0d P:%0d" % (seconds_playing, probabilityDict[winner]['percent'], '%', winner, frequency, probabilityDict[winner]['power'])            
-            if( winner != "silence" ):
+            if( winner != "silence" and probabilityDict[winner]['percent'] > 0):
                 print( short_comment )
             
             classifierQueue.put( probabilityDict )
@@ -300,7 +300,8 @@ def start_listen_loop( classifier, mode_switcher = False, persist_replay = False
                 
                 long_comment = "Time: %0.2f - Prediction in: %0.2f - Winner: %s - Percentage: %0d - Frequency %0d                                        " % (seconds_playing, prediction_time, winner, probabilityDict[winner]['percent'], probabilityDict[winner]['frequency'])
                 short_comment = "T: %0.2f - %0d%s - %s " % (seconds_playing, probabilityDict[winner]['percent'], '%', winner)
-                print( short_comment )
+                if(probabilityDict[winner]['percent'] > 0):
+                    print( short_comment )
                 if( ( infinite_duration == False and seconds_playing > amount_of_seconds ) or break_loop_controls() == False ):
                     continue_loop = False
 
