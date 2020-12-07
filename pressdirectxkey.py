@@ -2,19 +2,6 @@ import ctypes, time
 
 SendInput = ctypes.windll.user32.SendInput
 
-class ScanCodes:
-    LEFT_SHIFT = 0x2A
-    SPACE = 0x39
-    KEY_W = 0x11
-    KEY_A = 0x1E
-    KEY_S = 0x1F
-    KEY_D = 0x20
-    KEY_E = 0x12
-    KEY_Q = 0x10
-    KEY_F = 0x21
-    KEY_G = 0x22
-    KEY_1 = 0x02
-
 # C struct redefinitions 
 PUL = ctypes.POINTER(ctypes.c_ulong)
 class KeyBdInput(ctypes.Structure):
