@@ -49,9 +49,12 @@ class HadesMode(BaseMode):
         {
             'name': 'special',
             'sounds': ['pop'],
+            'strategy': 'frequency_threshold',
             'threshold': {
-                'percentage': 99,
-                'power': 50000
+                'percentage': 95,
+                'power': 20000,
+                'frequency': 55,
+                'below_frequency': 65,
             },
             'throttle': {
                 'move': 0.3
@@ -76,7 +79,7 @@ class HadesMode(BaseMode):
             'sounds': ['cluck'],
             'strategy': 'frequency_threshold',
             'threshold': {
-                'percentage': 95,
+                'percentage': 99,
                 'power': 10000,
                 'frequency': 55,
                 'below_frequency': 70,
