@@ -1,7 +1,9 @@
 from lib.modes.base_mode import *
-from pressdirectxkey import PressKey, ReleaseKey, ScanCodes
+from pressdirectxkey import PressKey, ReleaseKey
+from directinput_scancodes import ScanCodes
 
 class HadesMode(BaseMode):
+    logging = True
     attacking = False
     moving = False
     held_keys = {}
@@ -10,17 +12,21 @@ class HadesMode(BaseMode):
         {
             'name': 'attack',
             'sounds': ['hiss'],
+            'strategy': 'frequency_threshold',
             'threshold': {
-                'percentage': 95,
-                'power': 10000
+                'percentage': 99,
+                'power': 20000,
+                'frequency': 150,
             }
         },
         {
             'name': 'dash',
             'sounds': ['motorlips'],
+            'strategy': 'frequency_threshold',
             'threshold': {
                 'percentage': 95,
                 'power': 15000,
+                'below_frequency': 40,
             },
             'throttle': {
                 'dash': 0.3
@@ -29,13 +35,15 @@ class HadesMode(BaseMode):
         {
             'name': 'cast',
             'sounds': ['tch'],
+            'strategy': 'frequency_threshold',
             'threshold': {
-                'percentage': 99,
-                'power': 10000,
-                'above_frequency': 100,
+                'percentage': 90,
+                'power': 50000,
+                'frequency': 120,
             },
             'throttle': {
-                'cast': 0.3
+                'cast': 0.3,
+                'move': 0.3
             }
         },
         {
@@ -45,17 +53,18 @@ class HadesMode(BaseMode):
                 'percentage': 99,
                 'power': 50000
             },
-            # 'throttle': {
-            #     'special': 0.1
-            # }
+            'throttle': {
+                'move': 0.3
+            }
         },
         {
-            'name': 'interact-call-gift',
+            'name': 'interact',
             'sounds': ['whistle'],
+            'strategy': 'frequency_threshold',
             'threshold': {
                 'percentage': 99,
                 'power': 10000,
-                'above_frequency': 70,
+                'frequency': 70,
                 'below_frequency': 100,
             },
             'throttle': {
@@ -63,29 +72,26 @@ class HadesMode(BaseMode):
             }
         },
         {
-            'name': 'summon',
-            'sounds': ['low_whistle'],
-            'threshold': {
-                'percentage': 90,
-                'power': 10000
-            },
-            'throttle': {
-                'summon': 0.3
-            }
-        },
-        {
             'name': 'move',
             'sounds': ['cluck'],
+            'strategy': 'frequency_threshold',
             'threshold': {
                 'percentage': 95,
                 'power': 10000,
+                'frequency': 55,
+                'below_frequency': 70,
             },
             'throttle': {
-                'move': 0.3
+                'move': 0.3,
+                'special': 0.3,
+                'attack': 0.1
             }
-
         },
     ]
+
+    def log( self, action ):
+        if (self.logging):
+            print('........................................................................... ' + action)
 
     def short_press_key( self, scan_code ):
         if ( not self.inputManager.is_testing ):
@@ -105,15 +111,20 @@ class HadesMode(BaseMode):
         if ( not self.inputManager.is_testing ):
             ReleaseKey(scan_code)
 
-    def interact_call( self ):
-        side = 'left' if self.detector.detect_mouse_quadrant( 2, 1 ) == 1 else 'right'
+    def interact( self ):
+        self.log('interact')
+        quadrant = self.detector.detect_mouse_quadrant( 2, 2 )
         # If we are moving, this is a "call"
-        # otherwise it's interact or gift depending on mouse
+        # otherwise it's summon, interact, codex, or gift depending on mouse
         if ( self.moving ):
             self.short_press_key(ScanCodes.KEY_F)
-        elif ( side == 'left' ): 
+        elif ( quadrant == 1 ): 
+            self.short_press_key(ScanCodes.KEY_1)
+        elif ( quadrant == 2 ): 
             self.short_press_key(ScanCodes.KEY_E)
-        elif ( side == 'right' ):
+        elif ( quadrant == 3 ): 
+            self.short_press_key(ScanCodes.KEY_C)
+        elif ( quadrant == 4 ): 
             self.short_press_key(ScanCodes.KEY_G)
 
     def get_wasd( self ):
@@ -136,25 +147,26 @@ class HadesMode(BaseMode):
             self.attacking = False
 
         elif ( self.detect('dash') ):
-            self.short_press_key(ScanCodes.SPACE)
+            self.log('dash')
+            self.short_press_key(ScanCodes.KEY_SPACE)
 
         # cast is RMB single click, for now?
         elif ( self.detect('cast') ):
+            self.log('cast')
             self.drag_mouse(button='right')
             time.sleep(0.1)
             self.stop_drag_mouse(button='right')
 
         elif ( self.detect('special') ):
+            self.log('special')
             self.short_press_key(ScanCodes.KEY_Q)
 
-        elif ( self.detect('interact-call-gift') ):
-            self.interact_call()
-
-        elif ( self.detect('summon') ):
-            self.short_press_key(ScanCodes.KEY_1)
+        elif ( self.detect('interact') ):
+            self.interact()
 
         # If we get input for `move`, toggle moving
         elif ( self.detect('move') ):
+            self.log('move')
             self.moving = not self.moving
 
         # If we are moving now, hold keys and maybe release some
